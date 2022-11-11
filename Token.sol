@@ -10,6 +10,8 @@ contract Token {
   uint public decimals = 18;
  
 event Transfer(address indexed from, address indexed to, uint value );
+event Approval(address indexed owner, address indexed spender, uint value );
+
 
 constructor() {
   balances[msg.sender] = totalSupply;
@@ -29,9 +31,19 @@ function transfer(address to, uint value) public returns(bool){
   return true;
 }
 
+function transferFrom(address from, address to, uint value) public returns(bool){
+  require(balanceOf(from) >= value, 'balance not enough');
+  require(allowance[from][msg.sender]= value, 'allowance not enough');
+  balances[to] += value;
+  balances[from]-= value;
+  emit Transfer(from, to, value);
+  return true;
+ }
+
 //Giving an address authority / approval to spend funds 
 function approve(address spender, uint value) public returns(bool){
   allowance[msg.sender][spender] = value;
+  emit Approval(msg.sender, spender, value);
 }
 
 }
